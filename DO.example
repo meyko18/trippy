@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# Parameters ------------------------------------------------------
+
+# --- Sim-M dataset
+#TASK="sim-m"
+#DATA_DIR="data/simulated-dialogue/sim-M"
+#DATASET_CONFIG="dataset_config/sim-m.json"
+# --- Sim-R dataset
+#TASK="sim-r"
+#DATA_DIR="data/simulated-dialogue/sim-R"
+#DATASET_CONFIG="dataset_config/sim-r.json"
+# --- WOZ 2.0 dataset
+#TASK="woz2"
+#DATA_DIR="data/woz2"
+#DATASET_CONFIG="dataset_config/woz2.json"
+# --- MultiWOZ 2.1 legacy version dataset
+#TASK="multiwoz21_legacy"
+#DATA_DIR="data/MULTIWOZ2.1"
+#DATASET_CONFIG="dataset_config/multiwoz21.json"
+# --- MultiWOZ 2.1 dataset
+TASK="multiwoz21"
+DATA_DIR="data/multiwoz/data/MultiWOZ_2.1"
+DATASET_CONFIG="dataset_config/multiwoz21.json"
+# --- MultiWOZ 2.1 in ConvLab3's unified data format
+#TASK="unified"
+#DATA_DIR=""
+#DATASET_CONFIG="dataset_config/unified_multiwoz21.json"
+
+# Project paths etc. ----------------------------------------------
+
+OUT_DIR=results
+mkdir -p ${OUT_DIR}
+
+# Main ------------------------------------------------------------
+
+for step in train dev test; do
+    args_add=""
+    if [ "$step" = "train" ]; then
+	args_add="--do_train --predict_type=dummy" # INFO: For sim-M, we recommend to add "--svd=0.3"
+    elif [ "$step" = "dev" ] || [ "$step" = "test" ]; then
+	args_add="--do_eval --predict_type=${step}"
+    fi
+
+    python3 run_dst.py \
+	    --task_name=${TASK} \
+	    --data_dir=${DATA_DIR} \
+	    --dataset_config=${DATASET_CONFIG} \
+	    --model_type="roberta" \
+	    --model_name_or_path="roberta-base" \
+	    --do_lower_case \
+	    --learning_rate=1e-4 \
+	    --num_train_epochs=10 \
+	    --max_seq_length=180 \
+	    --per_gpu_train_batch_size=16 \
+	    --per_gpu_eval_batch_size=16 \
+	    --output_dir=${OUT_DIR} \
+	    --save_epochs=2 \
+	    --warmup_proportion=0.1 \
+	    --eval_all_checkpoints \
+	    --adam_epsilon=1e-6 \
+            --weight_decay=0.01 \
+	    ${args_add} \
+	    2>&1 | tee ${OUT_DIR}/${step}.log
+    
+    if [ "$step" = "dev" ] || [ "$step" = "test" ]; then
+    	python3 metric_dst.py \
+		--dataset_config=${DATASET_CONFIG} \
+    		--file_list="${OUT_DIR}/pred_res.${step}*json" \
+    		2>&1 | tee ${OUT_DIR}/eval_pred_${step}.log
+    fi
+done
