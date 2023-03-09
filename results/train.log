@@ -1,10 +1,4 @@
-03/08/2023 17:12:30 - INFO - utils_dst -    _________  ________  ___  ________  ________  ___    ___ 
-03/08/2023 17:12:30 - INFO - utils_dst -   |\___   ___\\   __  \|\  \|\   __  \|\   __  \|\  \  /  /|
-03/08/2023 17:12:30 - INFO - utils_dst -   \|___ \  \_\ \  \|\  \ \  \ \  \|\  \ \  \|\  \ \  \/  / /
-03/08/2023 17:12:30 - INFO - utils_dst -        \ \  \ \ \   _  _\ \  \ \   ____\ \   ____\ \    / / 
-03/08/2023 17:12:30 - INFO - utils_dst -         \ \  \ \ \  \\  \\ \  \ \  \___|\ \  \___|\/  /  /  
-03/08/2023 17:12:30 - INFO - utils_dst -          \ \__\ \ \__\\ _\\ \__\ \__\    \ \__\ __/  / /    
-03/08/2023 17:12:30 - INFO - utils_dst -           \|__|  \|__|\|__|\|__|\|__|     \|__||\___/ /     
-03/08/2023 17:12:30 - INFO - utils_dst -             (c) 2022 Heinrich Heine University \|___|/      
-03/08/2023 17:12:30 - INFO - utils_dst -   
-03/08/2023 17:12:30 - WARNING - __main__ -   Process rank: -1, device: cuda, n_gpu: 1, distributed training: False, 16-bits training: False
+Traceback (most recent call last):
+  File "/home/meyko/code/acl/trippy/run_dst.py", line 32, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
