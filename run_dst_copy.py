@@ -519,19 +519,19 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Required parameters
-    parser.add_argument("--task_name", default="multiwoz21", type=str, required=False,
+    parser.add_argument("--task_name", default=None, type=str, required=True,
                         help="Name of the task (e.g., multiwoz21).")
-    parser.add_argument("--data_dir", default="data/multiwoz/data/MultiWOZ_2.1", type=str, required=False,
+    parser.add_argument("--data_dir", default=None, type=str, required=True,
                         help="Task database.")
-    parser.add_argument("--dataset_config", default="dataset_config/multiwoz21.json", type=str, required=False,
+    parser.add_argument("--dataset_config", default=None, type=str, required=True,
                         help="Dataset configuration file.")
-    parser.add_argument("--predict_type", default="dummy", type=str, required=False,
+    parser.add_argument("--predict_type", default=None, type=str, required=True,
                         help="Portion of the data to perform prediction on (e.g., dev, test).")
-    parser.add_argument("--model_type", default="roberta", type=str, required=False,
+    parser.add_argument("--model_type", default=None, type=str, required=True,
                         help="Model type selected in the list: " + ", ".join(MODEL_CLASSES.keys()))
-    parser.add_argument("--model_name_or_path", default="roberta-base", type=str, required=False,
+    parser.add_argument("--model_name_or_path", default=None, type=str, required=True,
                         help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS))
-    parser.add_argument("--output_dir", default="results", type=str, required=False,
+    parser.add_argument("--output_dir", default=None, type=str, required=True,
                         help="The output directory where the model checkpoints and predictions will be written.")
 
     # Other parameters
@@ -584,21 +584,21 @@ def main():
                         help="Batch size per GPU/CPU for training.")
     parser.add_argument("--per_gpu_eval_batch_size", default=8, type=int,
                         help="Batch size per GPU/CPU for evaluation.")
-    parser.add_argument("--learning_rate", default=1e-4, type=float,
+    parser.add_argument("--learning_rate", default=5e-5, type=float,
                         help="The initial learning rate for Adam.")
     parser.add_argument('--gradient_accumulation_steps', type=int, default=1,
                         help="Number of updates steps to accumulate before performing a backward/update pass.")
-    parser.add_argument("--weight_decay", default=0.01, type=float,
+    parser.add_argument("--weight_decay", default=0.0, type=float,
                         help="Weight deay if we apply some.")
-    parser.add_argument("--adam_epsilon", default=1e-6, type=float,
+    parser.add_argument("--adam_epsilon", default=1e-8, type=float,
                         help="Epsilon for Adam optimizer.")
     parser.add_argument("--max_grad_norm", default=1.0, type=float,
                         help="Max gradient norm.")
-    parser.add_argument("--num_train_epochs", default=3, type=float,
+    parser.add_argument("--num_train_epochs", default=3.0, type=float,
                         help="Total number of training epochs to perform.")
     parser.add_argument("--max_steps", default=-1, type=int,
                         help="If > 0: set total number of training steps to perform. Overrides num_train_epochs.")
-    parser.add_argument("--warmup_proportion", default=0.1, type=float,
+    parser.add_argument("--warmup_proportion", default=0.0, type=float,
                         help="Linear warmup over warmup_proportion * steps.")
     parser.add_argument("--svd", default=0.0, type=float,
                         help="Slot value dropout ratio (default: 0.0)")
@@ -607,7 +607,7 @@ def main():
                         help="Log every X updates steps.")
     parser.add_argument('--save_steps', type=int, default=0,
                         help="Save checkpoint every X updates steps. Overwritten by --save_epochs.")
-    parser.add_argument('--save_epochs', type=int, default=2,
+    parser.add_argument('--save_epochs', type=int, default=0,
                         help="Save checkpoint every X epochs. Overrides --save_steps.")
     parser.add_argument("--eval_all_checkpoints", action='store_true',
                         help="Evaluate all checkpoints starting with the same prefix as model_name ending and ending with step number")
